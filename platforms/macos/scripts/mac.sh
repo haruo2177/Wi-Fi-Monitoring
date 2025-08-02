@@ -20,7 +20,7 @@ if [[ -f "$CONFIG_FILE" ]]; then
 fi
 
 # デフォルト設定（設定ファイルで上書き可能）
-LOGFILE="${LOGFILE:-$PROJECT_ROOT/network_monitor_log.csv}"
+LOGFILE="${LOGFILE:-$PROJECT_ROOT/../../logs/network_monitor_log.csv}"
 EXTERNAL_TARGETS=("${EXTERNAL_TARGETS[@]:-8.8.8.8 1.1.1.1 208.67.222.222}")
 ROUTER_ADDRESS="${ROUTER_ADDRESS:-}"
 PING_COUNT="${PING_COUNT:-4}"

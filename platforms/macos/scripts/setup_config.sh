@@ -66,7 +66,7 @@ cat > "$CONFIG_FILE" << EOF
 # このファイルを編集して環境に合わせてカスタマイズしてください
 
 # ログファイルの保存先パス
-# 空の場合は、プロジェクトルートに network_monitor_log.csv を作成
+# 空の場合は、プロジェクトルート/logs/network_monitor_log.csv を作成
 LOGFILE=""
 
 # 外部監視ターゲット（優先順位順）

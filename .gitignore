@@ -1,37 +1,56 @@
 # ログファイル
-*.log
-*.csv
+logs/*.csv
+logs/*.log
+logs/debug_*.log
+logs/error.log
+
+# 実行時生成ファイル
 network_monitor_log.csv
+*.log
+
+# プラットフォーム固有の実行時ファイル
+# macOS
+platforms/macos/network_monitor_log.csv
+platforms/macos/config/network_monitor.conf
+
+# Windows
+platforms/windows/network_monitor_log.csv
+platforms/windows/config/network_monitor.conf
+platforms/windows/*.log
+
+# Ubuntu/Linux
+platforms/ubuntu/network_monitor_log.csv
+platforms/ubuntu/config/network_monitor.conf
 
 # 一時ファイル
 *.tmp
 *.temp
-
-# macOS
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
 
-# エディタ
+# IDE・エディタ設定（プロジェクト固有以外）
+.idea/
 *.swp
 *.swo
 *~
 
-# IDE
-.vscode/settings.json
-.idea/
+# OS固有
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
 # バックアップファイル
 *.bak
 *.backup
+*.old
 
-# 設定ファイル（個人情報含む可能性）
-config.local.*
-local_config.*
+# 圧縮ファイル
+*.zip
+*.tar.gz
+*.rar
 
-# launchd出力ログ
-/tmp/networkmonitor.*.log
+# Serenaの一時ファイル（メモリファイルは保持）
+.serena/temp/

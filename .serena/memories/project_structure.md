@@ -1,42 +1,81 @@
-# プロジェクト構造（2025年8月2日更新）
+# マルチプラットフォーム対応プロジェクト構造（2025年8月2日更新）
 
-## ディレクトリ構成
+## 新しいディレクトリ構成
+
 ```
 Wi-Fi-Monitoring/
-├── README.md                          # プロジェクト説明書（修正済み）
-├── scripts/
-│   ├── mac.sh                         # メイン監視スクリプト（Wi-Fi情報取得修正済み）
-│   ├── install.sh                     # 自動インストールスクリプト
-│   ├── uninstall.sh                   # アンインストールスクリプト
-│   └── setup_config.sh                # 設定ファイル初期化スクリプト
-├── config/
-│   └── network_monitor.conf           # 設定ファイル（環境別カスタマイズ）
-├── launchd/
-│   └── com.user.networkmonitor.plist  # macOS自動実行設定
-├── network_monitor_log.csv            # ログファイル（実行時生成、正常動作中）
-├── .gitignore                         # Git除外設定
+├── README.md                          # マルチプラットフォーム概要
+├── platforms/                        # プラットフォーム別実装
+│   ├── macos/                         # macOS専用（完成済み）
+│   │   ├── README.md                  # macOS固有説明
+│   │   ├── scripts/
+│   │   │   ├── mac.sh                 # 既存スクリプト（移動済み）
+│   │   │   ├── install.sh             # インストールスクリプト
+│   │   │   ├── uninstall.sh           # アンインストール
+│   │   │   └── setup_config.sh        # 設定初期化
+│   │   ├── config/
+│   │   │   └── network_monitor.conf   # 設定ファイル（移動済み）
+│   │   └── launchd/
+│   │       └── com.user.networkmonitor.plist
+│   ├── windows/                       # Windows専用（構造のみ）
+│   │   ├── README.md                  # Windows固有説明
+│   │   ├── scripts/                   # PowerShellスクリプト用
+│   │   ├── config/                    # Windows設定用
+│   │   └── scheduled_tasks/           # タスクスケジューラ用
+│   └── ubuntu/                        # Ubuntu専用（構造のみ）
+│       ├── README.md                  # Ubuntu固有説明
+│       ├── scripts/                   # Bashスクリプト用
+│       ├── config/                    # Ubuntu設定用
+│       └── systemd/                   # systemdサービス用
+├── shared/                            # 共通リソース
+│   ├── templates/
+│   │   └── base_config.conf           # 共通設定テンプレート
+│   └── docs/
+│       ├── CSV_FORMAT.md              # CSV形式仕様
+│       └── NETWORK_CONCEPTS.md        # ネットワーク監視概念
+├── logs/                              # ログディレクトリ
+│   ├── README.md                      # ログディレクトリ説明
+│   ├── .gitkeep                       # Git用
+│   └── network_monitor_log.csv        # メインログ（移動済み）
+├── docs/                              # プロジェクトドキュメント
+├── .gitignore                         # マルチプラットフォーム対応更新
 ├── .vscode/                           # VS Code設定
-│   └── settings.json                  # スペルチェック辞書
 └── .serena/                           # Serena設定
-    ├── project.yml                    # Serena設定（shell言語に修正）
-    └── memories/                      # Serenaメモリファイル
+    ├── project.yml                    # マルチプラットフォーム対応更新
+    └── memories/                      # 更新済みメモリ
 ```
 
-## 主要ファイルの状態
+## 実装状況
 
-### scripts/mac.sh
-- **最新修正**: system_profilerベースのWi-Fi情報取得に変更
-- **修正内容**: airportコマンドから現代的なアプローチに移行
-- **動作状況**: SSID、Signal、Noise、Channel、TransmitRate正常取得
-- **BSSID**: macOSセキュリティ制限により取得困難（N/A）
+### 完了済み（macOS）
+- ✅ 既存ファイルの適切な移動
+- ✅ macOS固有のREADME作成
+- ✅ 動作実績あり（system_profiler使用）
+- ✅ SSID, Signal, Channel, TransmitRate取得成功
 
-### network_monitor_log.csv
-- **最新状況**: 正常にログ記録中
-- **Wi-Fi環境**: binky-3d4704-5G (802.11ax)
-- **性能**: TransmitRate 648-720 Mbps（優良）
-- **信号品質**: -55〜-58 dBm（良好）
+### 構造準備済み（Windows/Ubuntu）
+- ✅ ディレクトリ構造作成
+- ✅ プラットフォーム固有README作成
+- ✅ 技術仕様文書化
+- 🚧 実装スクリプトは今後作成予定
 
-### config/network_monitor.conf
-- **設定方式**: 独立設定ファイル方式
-- **自動検出**: ルーターIP 192.168.2.1
-- **外部ターゲット**: 複数DNS配列 ["8.8.8.8", "1.1.1.1", "208.67.222.222"]
+### 共通基盤
+- ✅ 統一CSV形式仕様
+- ✅ 共通設定テンプレート
+- ✅ ネットワーク監視概念文書
+- ✅ マルチプラットフォーム対応.gitignore
+
+## 技術仕様統一
+
+### CSV出力形式
+全プラットフォームで同一のCSVヘッダーと形式を使用
+
+### 設定項目統一
+- LOGFILE_PATH, EXTERNAL_TARGETS[], ROUTER_ADDRESS
+- PING_COUNT, PING_TIMEOUT, DEBUG
+- プラットフォーム固有設定を含む包括的テンプレート
+
+### ディレクトリ命名規則
+- platforms/{os}/scripts/ - 実行スクリプト
+- platforms/{os}/config/ - 設定ファイル
+- platforms/{os}/{scheduler}/ - プラットフォーム固有自動実行
