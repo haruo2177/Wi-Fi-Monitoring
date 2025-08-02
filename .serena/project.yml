@@ -1,3 +1,42 @@
 project_name: Wi-Fi-Monitoring
-language: shell
-description: Multi-platform network quality monitoring tool that measures network performance and logs to CSV
+languages:
+  - javascript
+  - typescript
+  - shell
+  - react
+description: React-based web application for Wi-Fi network monitoring and visualization with real-time charts, platform-specific configuration management, and Express.js API backend
+main_technologies:
+  frontend:
+    - "React 18"
+    - "React Router DOM v6"
+    - "Recharts 2.12"
+    - "Vite"
+    - "Lucide React"
+  backend:
+    - "Express.js"
+    - "Node.js"
+    - "csv-parser"
+  platforms:
+    - "macOS (launchd, system_profiler)"
+    - "Windows (Task Scheduler, netsh) - planned"
+    - "Ubuntu (systemd, iwconfig) - planned"
+key_features:
+  - "Real-time network monitoring with ping response times"
+  - "Wi-Fi signal strength and packet loss visualization"
+  - "Time-series charts with 24h/7d/30d ranges"
+  - "Platform-specific configuration management"
+  - "CSV data logging and API endpoints"
+  - "SPA navigation with React Router"
+  - "Responsive dark theme UI"
+entry_points:
+  - "src/main.jsx (React app)"
+  - "server.cjs (Express API)"
+  - "platforms/macos/scripts/ (shell scripts)"
+dev_servers:
+  - "http://localhost:3000 (Vite dev server)"
+  - "http://localhost:3002 (Express API)"
+npm_scripts:
+  - "npm run dev (start Vite dev server)"
+  - "npm run server (start Express API)"
+  - "npm run build (production build)"
+  - "npm run start (build and start production server)"

@@ -12,6 +12,7 @@
     "networksetup",
     "RSSI",
     "stddev",
+    "Vite",
     "WLAN"
   ]
 }

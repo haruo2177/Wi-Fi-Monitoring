@@ -1,56 +1,243 @@
-# Network Quality Monitor
+# Wi-Fi Network Monitoring & Visualization
 
-マルチプラットフォーム対応のネットワーク品質監視ツールです。定期的にネットワーク接続の状態を測定し、結果を CSV ファイルに記録します。
+React Router を使用した Web ベースのネットワーク監視・可視化ツールです。ネットワーク品質の監視、設定管理、データ可視化を統合したソリューションを提供します。
 
-## 対応プラットフォーム
+## 🌟 主要機能
 
-| プラットフォーム | 状態        | ディレクトリ         | 主要技術                          |
-| ---------------- | ----------- | -------------------- | --------------------------------- |
-| **macOS**        | ✅ 完全対応 | `platforms/macos/`   | Zsh, system_profiler, launchd     |
-| **Windows**      | 🚧 開発予定 | `platforms/windows/` | PowerShell, netsh, Task Scheduler |
-| **Ubuntu/Linux** | 🚧 開発予定 | `platforms/ubuntu/`  | Bash, iwconfig, systemd           |
+### 📊 リアルタイム監視
 
-## 主要な機能
+- **Ping 応答時間**: ルーター・外部サーバーへの応答時間測定
+- **パケットロス率**: ネットワーク品質の監視
+- **Wi-Fi 信号強度**: 信号品質・転送レートの可視化
+- **時系列グラフ**: Recharts を使用した美しいデータ可視化
 
-- **ネットワーク監視**: ローカルルーター・外部サーバーへの Ping 測定
-- **Wi-Fi 詳細情報**: SSID、信号強度、チャンネル、転送レート取得
-- **自動実行**: プラットフォーム固有のスケジューラー統合
-- **CSV 記録**: 統一されたデータ形式での記録
-- **設定自動検出**: 環境に応じた最適設定の自動生成
+### ⚙️ プラットフォーム設定管理
 
-## プロジェクト構造
+- **macOS**: launchd, system_profiler 完全対応
+- **Windows**: Task Scheduler, netsh (開発予定)
+- **Ubuntu/Linux**: systemd, iwconfig (開発予定)
+
+### 🎨 モダン UI
+
+- **React Router v6**: SPA ナビゲーション
+- **レスポンシブデザイン**: デスクトップ・モバイル対応
+- **ダークテーマ**: 目に優しいインターフェース
+
+## 🏗️ プロジェクト構造
 
 ```
 Wi-Fi-Monitoring/
-├── README.md                    # このファイル
-├── platforms/                  # プラットフォーム別実装
-│   ├── macos/                   # macOS専用（完成）
-│   ├── windows/                 # Windows専用（開発予定）
-│   └── ubuntu/                  # Ubuntu専用（開発予定）
-├── shared/                      # 共通リソース
-│   ├── templates/               # 設定テンプレート
-│   └── docs/                    # 技術ドキュメント
-├── logs/                        # ログファイル（実行時作成）
-└── docs/                        # プロジェクトドキュメント
+├── src/                         # React アプリケーション
+│   ├── components/              # 共通コンポーネント
+│   ├── pages/                   # ページコンポーネント
+│   │   ├── Home.jsx            # ホームページ
+│   │   ├── Settings.jsx        # 設定一覧
+│   │   ├── SettingsPlatform.jsx # プラットフォーム別設定
+│   │   └── Monitoring.jsx      # 監視・可視化
+│   └── main.jsx                # アプリエントリーポイント
+├── server.cjs                   # Express API サーバー
+├── platforms/                   # プラットフォーム別実装
+│   ├── macos/                   # macOS (完成)
+│   ├── windows/                 # Windows (開発予定)
+│   └── ubuntu/                  # Ubuntu (開発予定)
+├── logs/                        # ログファイル
+│   └── network_monitor_log.csv  # 監視データ
+└── shared/                      # 共通リソース
+    └── docs/                    # 技術ドキュメント
 ```
 
-## 使用方法
+## 🚀 セットアップ・起動
 
-### macOS
+### 前提条件
+
+- Node.js (v16 以上)
+- npm または yarn
+
+### インストール
 
 ```bash
-# macOSディレクトリに移動
-cd platforms/macos/
+# リポジトリをクローン
+git clone <repository-url>
+cd Wi-Fi-Monitoring
 
-# 設定ファイル初期化
-./scripts/setup_config.sh
+# 依存関係をインストール
+npm install
+```
 
-# 単発実行
-./scripts/network_monitor.sh
+## 🚀 開発環境での起動
+
+### 一括起動（推奨）
+
+フロントエンドとバックエンドを同時に起動:
+
+```bash
+# NPMスクリプトで起動
+npm run dev:full
+
+# またはシェルスクリプトで起動
+./start-full.sh
+
+# バックエンド起動完了を待ってからフロントエンド起動
+npm run dev:full-wait
+```
+
+### 個別起動
+
+必要に応じて個別に起動することも可能:
+
+```bash
+# バックエンドサーバー (ポート 3002)
+npm run server
+
+# フロントエンド開発サーバー (ポート 3000) - 別ターミナルで実行
+npm run dev
+```
+
+### アクセス
+
+- **Web UI**: http://localhost:3000
+- **API**: http://localhost:3002/api/
+
+## 📦 本格運用での起動
+
+### 本番環境での起動
+
+```bash
+# ビルド & 本番サーバー起動
+npm run start
+```
+
+## 📱 使用方法
+
+### 1. ホーム画面
+
+- **設定ボタン**: プラットフォーム別設定管理
+- **モニタリングボタン**: データ可視化画面
+
+### 2. 設定管理
+
+```
+設定 → プラットフォーム選択 → 設定確認・変更
+```
+
+- 監視間隔の調整
+- 外部サーバーターゲットの設定
+- デバッグオプションの切り替え
+
+### 3. 監視・可視化
+
+- **時間範囲選択**: 24 時間 / 7 日間 / 30 日間
+- **リアルタイム更新**: 30 秒間隔での自動更新
+- **インタラクティブグラフ**: マウスオーバーで詳細表示
+
+## 📊 データ形式
+
+### CSV ログ形式
+
+```csv
+Timestamp,ConnectionType,InterfaceName,RouterPingAvg(ms),RouterPingMax(ms),RouterLoss(%),ExternalPingAvg(ms),ExternalPingMax(ms),ExternalLoss(%),SSID,BSSID,Signal(dBm),Noise(dBm),Channel,TransmitRate(Mbps)
+```
+
+### API エンドポイント
+
+| エンドポイント          | メソッド | 説明           |
+| ----------------------- | -------- | -------------- |
+| `/api/logs?range=24h`   | GET      | ログデータ取得 |
+| `/api/config/:platform` | GET      | 設定取得       |
+| `/api/config/:platform` | POST     | 設定保存       |
+
+## 🛠️ 技術スタック
+
+### フロントエンド
+
+- **React 18**: UI フレームワーク
+- **React Router DOM v6**: SPA ナビゲーション
+- **Recharts 2.12**: データ可視化
+- **Lucide React**: アイコンライブラリ
+- **Vite**: ビルドツール & 開発サーバー
+
+### バックエンド
+
+- **Express.js**: Web フレームワーク
+- **csv-parser**: CSV データ処理
+- **Node.js**: ランタイム環境
+
+### プラットフォーム統合
+
+- **macOS**: Zsh, system_profiler, launchd
+- **Windows**: PowerShell, netsh, Task Scheduler
+- **Ubuntu**: Bash, iwconfig, systemd
+
+## 📋 NPM Scripts
+
+```bash
+npm run dev      # 開発サーバー起動 (Vite)
+npm run build    # 本番ビルド
+npm run preview  # ビルド結果プレビュー
+npm run server   # Express APIサーバー起動
+npm run start    # ビルド & 本番サーバー起動
+npm run lint     # ESLint 実行
+```
+
+## 🔧 設定ファイル
+
+### プラットフォーム別設定例 (macOS)
+
+```bash
+# platforms/macos/config/network_monitor.conf
+LOGFILE_PATH="./logs/network_monitor_log.csv"
+EXTERNAL_TARGETS=("8.8.8.8" "1.1.1.1" "208.67.222.222")
+ROUTER_ADDRESS="auto"
+PING_COUNT=3
+PING_TIMEOUT=5
+DEBUG=false
+```
+
+## 🐛 トラブルシューティング
+
+### よくある問題
+
+1. **ポート競合エラー**
+
+   ```bash
+   # 別のポートを使用
+   export PORT=3003 && npm run server
+   ```
+
+2. **CSV ファイルが見つからない**
+
+   ```bash
+   # ログディレクトリ作成
+   mkdir -p logs
+   ```
+
+3. **権限エラー (macOS)**
+   ```bash
+   # スクリプトに実行権限付与
+   chmod +x platforms/macos/scripts/*.sh
+   ```
+
+## 📈 今後の開発予定
+
+- [ ] Windows プラットフォーム対応
+- [ ] Ubuntu/Linux プラットフォーム対応
+- [ ] アラート機能
+- [ ] データエクスポート機能
+- [ ] 詳細統計レポート
+
+## 🤝 コントリビューション
+
+プルリクエストやイシューの報告を歓迎します。
+
+## 📄 ライセンス
+
+このプロジェクトは MIT ライセンスの下で公開されています。
 
 # 自動インストール
+
 ./scripts/install.sh
-```
+
+````
 
 ### Windows（開発予定）
 
@@ -63,7 +250,7 @@ cd platforms\windows\
 
 # 実行
 .\scripts\network_monitor.ps1
-```
+````
 
 ### Ubuntu/Linux（開発予定）
 

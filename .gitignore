@@ -52,5 +52,41 @@ Desktop.ini
 *.tar.gz
 *.rar
 
+# Node.js / React プロジェクト関連
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# React / Vite ビルド関連
+dist/
+build/
+.vite/
+.cache/
+
+# 環境変数ファイル
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ESLint / Prettier キャッシュ
+.eslintcache
+.stylelintcache
+
+# IDE・エディタ (React開発用)
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+*.code-workspace
+
+# デバッグ・テスト関連
+coverage/
+.nyc_output/
+*.lcov
+
 # Serenaの一時ファイル（メモリファイルは保持）
 .serena/temp/
