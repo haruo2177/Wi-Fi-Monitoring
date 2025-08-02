@@ -5,8 +5,8 @@
 
 echo "🚀 Wi-Fi Monitoring Tool を起動中..."
 echo ""
-echo "📊 バックエンドサーバー: http://localhost:3002"
-echo "🌐 フロントエンドUI: http://localhost:3000"
+echo "📊 バックエンドサーバー: http://localhost:${SERVER_PORT:-3002}"
+echo "🌐 フロントエンドUI: http://localhost:${FRONTEND_PORT:-3000}"
 echo ""
 echo "⚠️  終了するには Ctrl+C を押してください"
 echo ""

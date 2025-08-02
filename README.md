@@ -98,6 +98,45 @@ npm run dev
 - **Web UI**: http://localhost:3000
 - **API**: http://localhost:3002/api/
 
+## 🔧 環境変数設定
+
+プロジェクトは環境変数による設定カスタマイズに対応しています。
+
+### 設定方法
+
+```bash
+# .env.example をコピーして環境変数ファイルを作成
+cp .env.example .env
+
+# .env ファイルを編集して設定をカスタマイズ
+nano .env
+```
+
+### 主要な環境変数
+
+| 環境変数 | デフォルト | 説明 |
+|---------|-----------|------|
+| `SERVER_PORT` | 3002 | バックエンドサーバーポート |
+| `FRONTEND_PORT` | 3000 | フロントエンドサーバーポート |
+| `PRIMARY_DNS` | 8.8.8.8 | プライマリDNSサーバー |
+| `SECONDARY_DNS` | 1.1.1.1 | セカンダリDNSサーバー |
+| `PING_TIMEOUT_MS` | 3000 | Pingタイムアウト（ミリ秒） |
+| `MONITOR_INTERVAL_SEC` | 300 | 監視間隔（秒） |
+| `LOG_DIR` | /tmp | ログディレクトリ |
+
+### 使用例
+
+```bash
+# 開発環境（高頻度監視）
+export MONITOR_INTERVAL_SEC=60
+export PING_TIMEOUT_MS=2000
+
+# 本番環境（異なるポート）
+export SERVER_PORT=8080
+export FRONTEND_PORT=80
+export LOG_DIR=/var/log/wifi-monitor
+```
+
 ## 📦 本格運用での起動
 
 ### 本番環境での起動

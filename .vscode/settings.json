@@ -8,6 +8,7 @@
     "LOGFILE",
     "Mbps",
     "netsh",
+    "NETWORKMANAGER",
     "networkmonitor",
     "networksetup",
     "RSSI",

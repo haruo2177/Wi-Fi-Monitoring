@@ -42,7 +42,7 @@ ACTIVE_IF=$(route -n get default 2>/dev/null | grep 'interface:' | awk '{print $
 # DNS接続テスト
 print_info "外部DNS接続をテスト中..."
 AVAILABLE_DNS=()
-for dns in "8.8.8.8" "1.1.1.1" "208.67.222.222"; do
+for dns in "${PRIMARY_DNS:-8.8.8.8}" "${SECONDARY_DNS:-1.1.1.1}" "${TERTIARY_DNS:-208.67.222.222}"; do
     if ping -c 1 -W 1000 "$dns" >/dev/null 2>&1; then
         AVAILABLE_DNS+=("$dns")
         print_success "接続OK: $dns"
@@ -76,7 +76,7 @@ EOF
 if [[ ${#AVAILABLE_DNS[@]} -gt 0 ]]; then
     echo "EXTERNAL_TARGETS=($(printf '"%s" ' "${AVAILABLE_DNS[@]}"))" >> "$CONFIG_FILE"
 else
-    echo "EXTERNAL_TARGETS=(\"8.8.8.8\" \"1.1.1.1\" \"208.67.222.222\")" >> "$CONFIG_FILE"
+    echo "EXTERNAL_TARGETS=(\"${PRIMARY_DNS:-8.8.8.8}\" \"${SECONDARY_DNS:-1.1.1.1}\" \"${TERTIARY_DNS:-208.67.222.222}\")" >> "$CONFIG_FILE"
 fi
 
 cat >> "$CONFIG_FILE" << EOF
@@ -89,7 +89,7 @@ ROUTER_ADDRESS="${AUTO_ROUTER:-}"
 PING_COUNT=4
 
 # Ping タイムアウト時間（ミリ秒）
-PING_TIMEOUT=3000
+PING_TIMEOUT=${PING_TIMEOUT_MS:-3000}
 
 # デバッグモード（true/false）
 DEBUG=false

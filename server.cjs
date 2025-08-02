@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const fs = require("fs").promises;
 const path = require("path");
@@ -5,7 +6,7 @@ const csv = require("csv-parser");
 const { createReadStream } = require("fs");
 
 const app = express();
-const PORT = 3002;
+const PORT = process.env.SERVER_PORT || 3002;
 
 app.use(express.json());
 app.use(express.static("dist"));
