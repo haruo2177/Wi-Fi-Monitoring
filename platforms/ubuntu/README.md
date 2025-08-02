@@ -1,17 +1,17 @@
 # Network Monitor for Ubuntu/Linux
 
-Ubuntu/Linux専用のネットワーク品質監視ツールです。
+Ubuntu/Linux 専用のネットワーク品質監視ツールです。
 
 ## 特徴
 
 - **技術スタック**: Bash, iwconfig, NetworkManager, systemd
-- **権限要件**: 通常ユーザー（一部コマンドはsudo推奨）
+- **権限要件**: 通常ユーザー（一部コマンドは sudo 推奨）
 - **自動実行**: systemd service + timer
-- **Wi-Fi情報取得**: iwconfig, nmcli, iw
+- **ネットワーク情報取得**: iwconfig, nmcli, iw
 
 ## システム要件
 
-- Ubuntu 18.04 以降（または同等のLinuxディストリビューション）
+- Ubuntu 18.04 以降（または同等の Linux ディストリビューション）
 - Bash 4.0 以降
 - wireless-tools または iw パッケージ
 - NetworkManager（推奨）
@@ -40,41 +40,45 @@ sudo apt install iw net-tools iputils-ping
 sudo ./scripts/install.sh
 ```
 
-## Ubuntu固有の機能
+## Ubuntu 固有の機能
 
-### Wi-Fi情報取得
-- iwconfigでワイヤレス詳細情報取得
-- nmcliでNetworkManager情報取得
-- iwコマンドで現代的なWi-Fi情報取得
+### ネットワーク情報取得
 
-### systemd統合
-- systemd serviceとして実行
-- systemd timerで定期実行
+- iwconfig でワイヤレス詳細情報取得
+- nmcli で NetworkManager 情報取得
+- iw コマンドで現代的なネットワーク情報取得
+
+### systemd 統合
+
+- systemd service として実行
+- systemd timer で定期実行
 - ユーザーサービスまたはシステムサービス選択可
 
-## 取得可能なWi-Fi情報
+## 取得可能なネットワーク情報
 
-| 項目 | 説明 | Linux実装 |
-|------|------|-----------|
-| SSID | ネットワーク名 | iwconfig, nmcli |
-| Signal | 信号強度 | iwconfig, iw |
-| Noise | ノイズレベル | iwconfig |
-| Channel | チャンネル | iwconfig, iw |
-| LinkSpeed | リンク速度 | iwconfig, ethtool |
+| 項目      | 説明           | Linux 実装        |
+| --------- | -------------- | ----------------- |
+| SSID      | ネットワーク名 | iwconfig, nmcli   |
+| Signal    | 信号強度       | iwconfig, iw      |
+| Noise     | ノイズレベル   | iwconfig          |
+| Channel   | チャンネル     | iwconfig, iw      |
+| LinkSpeed | リンク速度     | iwconfig, ethtool |
 
 ## 権限とセキュリティ
 
 ### 通常ユーザーで実行可能
+
 - ping コマンド
 - 基本的なネットワーク情報取得
 
-### sudo権限が推奨される項目
-- 詳細なWi-Fi情報取得
+### sudo 権限が推奨される項目
+
+- 詳細なネットワーク情報取得
 - システムサービスとしての登録
-- 一部のiwコマンド機能
+- 一部の iw コマンド機能
 
 ## 制限事項
 
 - ディストリビューションによりコマンドの可用性が異なる
-- 古いシステムではiwコマンドが利用できない場合有り
-- NetworkManagerが無効な環境では一部機能制限有り
+- 古いシステムでは iw コマンドが利用できない場合有り
+- NetworkManager が無効な環境では一部機能制限有り

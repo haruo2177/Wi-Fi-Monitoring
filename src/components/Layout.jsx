@@ -7,7 +7,7 @@ export default function Layout() {
   return (
     <div className="layout">
       <header className="header">
-        <h1>Wi-Fi ネットワーク監視ツール</h1>
+        <h1>ネットワーク監視ツール</h1>
       </header>
       <nav className="nav">
         <ul className="nav-links">

@@ -10,7 +10,7 @@ export default function SettingsPlatform() {
 
   const platformNames = {
     macos: 'macOS',
-    windows: 'Windows', 
+    windows: 'Windows',
     ubuntu: 'Ubuntu/Linux'
   }
 
@@ -84,7 +84,7 @@ export default function SettingsPlatform() {
         },
         body: JSON.stringify(config)
       })
-      
+
       if (response.ok) {
         alert('設定が保存されました')
       } else {
@@ -145,7 +145,7 @@ export default function SettingsPlatform() {
               onChange={(e) => handleInputChange('LOGFILE_PATH', e.target.value)}
             />
           </div>
-          
+
           <div className="config-field">
             <label>外部監視対象 (カンマ区切り)</label>
             <input
@@ -154,7 +154,7 @@ export default function SettingsPlatform() {
               onChange={(e) => handleArrayChange('EXTERNAL_TARGETS', e.target.value)}
             />
           </div>
-          
+
           <div className="config-field">
             <label>ルーターアドレス</label>
             <input
@@ -163,7 +163,7 @@ export default function SettingsPlatform() {
               onChange={(e) => handleInputChange('ROUTER_ADDRESS', e.target.value)}
             />
           </div>
-          
+
           <div className="config-field">
             <label>Ping回数</label>
             <input
@@ -172,7 +172,7 @@ export default function SettingsPlatform() {
               onChange={(e) => handleInputChange('PING_COUNT', parseInt(e.target.value))}
             />
           </div>
-          
+
           <div className="config-field">
             <label>Pingタイムアウト (秒)</label>
             <input
@@ -181,7 +181,7 @@ export default function SettingsPlatform() {
               onChange={(e) => handleInputChange('PING_TIMEOUT', parseInt(e.target.value))}
             />
           </div>
-          
+
           <div className="config-field">
             <label>
               <input
@@ -208,7 +208,7 @@ export default function SettingsPlatform() {
               disabled
             />
           </div>
-          
+
           <div className="config-field">
             <label>Wi-Fi情報取得コマンド</label>
             <input
@@ -218,7 +218,7 @@ export default function SettingsPlatform() {
               disabled
             />
           </div>
-          
+
           <div className="config-field">
             <label>スケジューラー</label>
             <input
@@ -231,8 +231,8 @@ export default function SettingsPlatform() {
       </div>
 
       <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
-        <button 
-          className="button primary" 
+        <button
+          className="button primary"
           onClick={handleSave}
           disabled={saving}
         >
@@ -248,9 +248,9 @@ export default function SettingsPlatform() {
             </>
           )}
         </button>
-        
-        <button 
-          className="button" 
+
+        <button
+          className="button"
           onClick={loadConfig}
           disabled={loading}
         >

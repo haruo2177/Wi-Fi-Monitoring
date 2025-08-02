@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Wi-Fi Monitoring Tool - Full Stack Starter
+# Network Monitoring Tool - Full Stack Starter
 # フロントエンドとバックエンドを同時起動
 
-echo "🚀 Wi-Fi Monitoring Tool を起動中..."
+echo "🚀 Network Monitoring Tool を起動中..."
 echo ""
 echo "📊 バックエンドサーバー: http://localhost:${SERVER_PORT:-3002}"
 echo "🌐 フロントエンドUI: http://localhost:${FRONTEND_PORT:-3000}"

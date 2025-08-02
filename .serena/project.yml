@@ -1,10 +1,10 @@
-project_name: Wi-Fi-Monitoring
+project_name: Network-Monitoring
 languages:
   - javascript
   - typescript
   - shell
   - react
-description: React-based web application for Wi-Fi network monitoring and visualization with real-time charts, platform-specific configuration management, and Express.js API backend
+description: React-based web application for Network network monitoring and visualization with real-time charts, platform-specific configuration management, and Express.js API backend
 main_technologies:
   frontend:
     - "React 18"

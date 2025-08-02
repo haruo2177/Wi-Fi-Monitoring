@@ -1,4 +1,4 @@
-# Wi-Fi Network Monitoring & Visualization
+# Network Monitoring & Visualization
 
 React Router を使用した Web ベースのネットワーク監視・可視化ツールです。ネットワーク品質の監視、設定管理、データ可視化を統合したソリューションを提供します。
 
@@ -26,7 +26,7 @@ React Router を使用した Web ベースのネットワーク監視・可視�
 ## 🏗️ プロジェクト構造
 
 ```
-Wi-Fi-Monitoring/
+Network-Monitoring/
 ├── src/                         # React アプリケーション
 │   ├── components/              # 共通コンポーネント
 │   ├── pages/                   # ページコンポーネント
@@ -58,7 +58,7 @@ Wi-Fi-Monitoring/
 ```bash
 # リポジトリをクローン
 git clone <repository-url>
-cd Wi-Fi-Monitoring
+cd Network-Monitoring
 
 # 依存関係をインストール
 npm install
@@ -114,15 +114,15 @@ nano .env
 
 ### 主要な環境変数
 
-| 環境変数 | デフォルト | 説明 |
-|---------|-----------|------|
-| `SERVER_PORT` | 3002 | バックエンドサーバーポート |
-| `FRONTEND_PORT` | 3000 | フロントエンドサーバーポート |
-| `PRIMARY_DNS` | 8.8.8.8 | プライマリDNSサーバー |
-| `SECONDARY_DNS` | 1.1.1.1 | セカンダリDNSサーバー |
-| `PING_TIMEOUT_MS` | 3000 | Pingタイムアウト（ミリ秒） |
-| `MONITOR_INTERVAL_SEC` | 300 | 監視間隔（秒） |
-| `LOG_DIR` | /tmp | ログディレクトリ |
+| 環境変数               | デフォルト | 説明                         |
+| ---------------------- | ---------- | ---------------------------- |
+| `SERVER_PORT`          | 3002       | バックエンドサーバーポート   |
+| `FRONTEND_PORT`        | 3000       | フロントエンドサーバーポート |
+| `PRIMARY_DNS`          | 8.8.8.8    | プライマリ DNS サーバー      |
+| `SECONDARY_DNS`        | 1.1.1.1    | セカンダリ DNS サーバー      |
+| `PING_TIMEOUT_MS`      | 3000       | Ping タイムアウト（ミリ秒）  |
+| `MONITOR_INTERVAL_SEC` | 300        | 監視間隔（秒）               |
+| `LOG_DIR`              | /tmp       | ログディレクトリ             |
 
 ### 使用例
 
@@ -134,7 +134,7 @@ export PING_TIMEOUT_MS=2000
 # 本番環境（異なるポート）
 export SERVER_PORT=8080
 export FRONTEND_PORT=80
-export LOG_DIR=/var/log/wifi-monitor
+export LOG_DIR=/var/log/network-monitor
 ```
 
 ## 📦 本格運用での起動
