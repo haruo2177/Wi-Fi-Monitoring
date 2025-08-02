@@ -6,11 +6,12 @@ macOS 用のネットワーク品質監視ツールです。定期的にネッ�
 
 このツールは以下の機能を提供します：
 
-- ローカルルーター（デフォルト: 192.168.1.1）への ping 測定
-- 外部サーバー（Google DNS: 8.8.8.8）への ping 測定
-- Wi-Fi 接続時の詳細情報収集（SSID, BSSID, 信号強度など）
+- ローカルルーター（自動検出）への ping 測定
+- 外部サーバー（複数のDNSサーバーから自動選択）への ping 測定
+- Wi-Fi 接続時の詳細情報収集（SSID, 信号強度, チャンネル, 転送レートなど）
 - 有線/無線接続の自動判別
 - CSV 形式でのログ記録
+- 環境設定の自動検出と最適化
 
 ## ディレクトリ構成
 
@@ -36,7 +37,19 @@ Wi-Fi-Monitoring/
 
 - macOS (Darwin kernel)
 - Zsh shell
-- 管理者権限（Wi-Fi 詳細情報取得のため）
+- 通常ユーザー権限（管理者権限不要）
+
+## 技術仕様
+
+### Wi-Fi 情報取得方法
+- `system_profiler SPAirPortDataType` を使用（現代的なアプローチ）
+- 廃止予定の `airport` コマンドは使用しない
+- 通常ユーザー権限で動作
+
+### ネットワーク測定
+- 複数の外部DNSサーバーから接続可能なものを自動選択
+- デフォルトゲートウェイの自動検出
+- パケットロス率とレイテンシの同時測定
 
 ## インストール・使用方法
 
@@ -70,7 +83,8 @@ chmod +x scripts/mac.sh
 
 インストールスクリプトは以下の処理を自動で行います：
 
-- 環境に合わせた設定ファイルの生成
+- 環境の自動検出（ルーターIP、最適なDNSサーバー）
+- 設定ファイルの生成とカスタマイズ
 - スクリプトパスの自動設定
 - 実行権限の付与
 - launchd サービスの登録・開始
@@ -108,21 +122,41 @@ crontab -e
 
 ## 設定
 
-### 基本設定（scripts/mac.sh 内）
+### 設定ファイル（config/network_monitor.conf）
+
+設定は独立した設定ファイルで管理されています：
 
 ```bash
-# ログファイルの保存先
-LOGFILE=./network_monitor_log.csv
+# ログファイルの保存先（空の場合はプロジェクトルートに作成）
+LOGFILE=""
 
-# 外部監視ターゲット
-EXTERNAL_TARGET="8.8.8.8"
+# 外部監視ターゲット（優先順位順、接続可能なものを自動選択）
+EXTERNAL_TARGETS=("8.8.8.8" "1.1.1.1" "208.67.222.222")
 
-# ローカルルーターのIPアドレス（環境に合わせて変更）
-ROUTER_ADDRESS="192.168.1.1"
+# ローカルルーターのIPアドレス（自動検出、手動設定も可能）
+ROUTER_ADDRESS="192.168.2.1"
 
 # Ping試行回数
 PING_COUNT=4
+
+# Ping タイムアウト時間（ミリ秒）
+PING_TIMEOUT=3000
+
+# デバッグモード
+DEBUG=false
 ```
+
+### 設定ファイルの初期化
+
+```bash
+# 環境を自動検出して設定ファイルを生成
+./scripts/setup_config.sh
+```
+
+このスクリプトは以下を自動で行います：
+- デフォルトゲートウェイ（ルーター）の検出
+- 外部DNSサーバーの接続テスト
+- 最適な設定値の生成
 
 ### ルーター IP アドレスの確認方法
 
@@ -147,7 +181,7 @@ CSV ファイル（`network_monitor_log.csv`）に以下の形式で記録され
 | ExternalPingMax(ms) | 外部 ping 最大応答時間                  |
 | ExternalLoss(%)     | 外部 ping パケットロス率                |
 | SSID                | Wi-Fi の SSID（無線時のみ）             |
-| BSSID               | Wi-Fi の BSSID（無線時のみ）            |
+| BSSID               | Wi-Fi の BSSID（無線時のみ、制限により取得困難） |
 | Signal(dBm)         | Wi-Fi 信号強度（無線時のみ）            |
 | Noise(dBm)          | Wi-Fi ノイズレベル（無線時のみ）        |
 | Channel             | Wi-Fi チャンネル（無線時のみ）          |
@@ -165,11 +199,11 @@ chmod +x scripts/mac.sh
 
 ### Wi-Fi 情報が取得できない
 
-Wi-Fi 詳細情報の取得には管理者権限が必要な場合があります：
+現在のスクリプトは `system_profiler` コマンドを使用して Wi-Fi 情報を取得します。通常ユーザー権限で動作しますが、一部の情報（BSSIDなど）はmacOSのセキュリティ制限により取得できない場合があります。
 
 ```bash
-# sudo で実行
-sudo ./scripts/mac.sh
+# デバッグモードで実行して詳細を確認
+DEBUG=true ./scripts/mac.sh
 ```
 
 ### ログファイルが作成されない
@@ -186,7 +220,10 @@ sudo ./scripts/mac.sh
 # 構文チェック
 zsh -n scripts/mac.sh
 
-# 詳細ログ出力
+# デバッグモードで実行
+DEBUG=true ./scripts/mac.sh
+
+# 詳細なトレース出力
 zsh -x scripts/mac.sh
 ```
 
