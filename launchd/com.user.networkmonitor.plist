@@ -6,7 +6,7 @@
     <string>com.user.networkmonitor</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/your_username/scripts/monitor-network.sh</string>
+        <string>SCRIPT_PATH_PLACEHOLDER</string>
     </array>
     <key>StartInterval</key>
     <integer>300</integer>
