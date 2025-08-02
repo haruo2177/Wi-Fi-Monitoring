@@ -1,0 +1,40 @@
+# ログファイル
+*.log
+*.csv
+network_monitor_log.csv
+
+# 一時ファイル
+*.tmp
+*.temp
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# エディタ
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# バックアップファイル
+*.bak
+*.backup
+
+# 設定ファイル（個人情報含む可能性）
+config.local.*
+local_config.*
+
+# launchd出力ログ
+/tmp/networkmonitor.*.log
+
+# Serenaの一時ファイル
+.serena/memories/
