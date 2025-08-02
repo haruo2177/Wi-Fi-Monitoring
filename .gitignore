@@ -35,6 +35,3 @@ local_config.*
 
 # launchd出力ログ
 /tmp/networkmonitor.*.log
-
-# Serenaの一時ファイル
-.serena/memories/
