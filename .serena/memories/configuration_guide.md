@@ -1,47 +1,59 @@
-# 設定・カスタマイズ情報
+# 設定・カスタマイズ情報（2025年8月2日更新）
 
-## 設定可能項目
+## 設定ファイル: config/network_monitor.conf
 
-### ファイルパス設定
+### 最新設定項目
 ```bash
-# ログファイルの保存先パス
-LOGFILE=./network_monitor_log.csv
-# 推奨: フルパス使用 例) ~/Documents/network_monitor_log.csv
+# ログファイルの保存先（空=プロジェクトルート）
+LOGFILE=""
+
+# 外部監視ターゲット（優先順位順、自動選択）
+EXTERNAL_TARGETS=("8.8.8.8" "1.1.1.1" "208.67.222.222")
+
+# ローカルルーター（自動検出結果: 192.168.2.1）
+ROUTER_ADDRESS="192.168.2.1"
+
+# Ping設定
+PING_COUNT=4                    # 試行回数
+PING_TIMEOUT=3000              # タイムアウト(ms)
+
+# デバッグモード
+DEBUG=false                    # true で詳細ログ
 ```
 
-### ネットワーク設定
+## 環境固有の設定
+
+### 自動検出機能
+- **ルーターIP**: `route -n get default` で自動検出
+- **外部DNS**: 接続テストで最適選択
+- **ネットワークIF**: アクティブインターフェース自動判定
+
+### Wi-Fi情報取得設定
+- **技術**: system_profiler SPAirPortDataType
+- **権限**: 通常ユーザー（sudo不要）
+- **取得項目**: SSID, Signal, Noise, Channel, TransmitRate
+- **制限**: BSSID取得困難（macOSセキュリティ）
+
+## カスタマイズ可能項目
+
+### パフォーマンス調整
+- **PING_COUNT**: 1-10（精度 vs 実行時間）
+- **PING_TIMEOUT**: 1000-5000ms（ネットワーク環境次第）
+- **実行間隔**: launchd設定で300秒（5分）
+
+### ログ設定
+- **パス**: 相対パス推奨（ポータビリティ）
+- **フォーマット**: CSV固定（互換性）
+- **ローテーション**: 外部ツール使用推奨
+
+## 設定初期化
 ```bash
-# 外部監視ターゲット（デフォルト: Google DNS）
-EXTERNAL_TARGET="8.8.8.8"
-# 代替案: "1.1.1.1" (Cloudflare), "208.67.222.222" (OpenDNS)
+# 環境自動検出で設定ファイル生成
+./scripts/setup_config.sh
 
-# ローカルルーターのIPアドレス
-ROUTER_ADDRESS="192.168.1.1"
-# 環境に応じて変更が必要: 192.168.0.1, 10.0.0.1 など
+# 手動設定確認
+cat config/network_monitor.conf
 
-# Pingの試行回数
-PING_COUNT=4
-# 1-10回程度が適切（回数が多いと実行時間増加）
+# 設定テスト
+DEBUG=true ./scripts/mac.sh
 ```
-
-## 環境固有の調整
-
-### ルーターIPアドレスの確認方法
-```bash
-# デフォルトゲートウェイ確認
-route -n get default | grep gateway
-
-# またはnetstatで確認
-netstat -rn | grep default
-```
-
-### Apple80211フレームワークパス
-```bash
-# 標準パス（通常変更不要）
-AIRPORT_PATH="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport"
-```
-
-## パフォーマンス調整
-- `PING_COUNT`: 精度 vs 実行時間のバランス
-- タイムアウト値: `-W 1000` (1秒、ネットワーク環境に応じて調整)
-- 実行間隔: 5分間隔を推奨（負荷とデータ量のバランス）
