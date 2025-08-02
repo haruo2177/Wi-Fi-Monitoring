@@ -1,0 +1,3 @@
+project_name: Wi-Fi-Monitoring
+language: python
+description: macOS network monitoring script that measures network quality and logs to CSV
