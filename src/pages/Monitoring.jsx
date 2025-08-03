@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts'
-import { Wifi, Globe, Router, Clock, Signal, AlertCircle } from 'lucide-react'
+import { Wifi, Globe, Router, Clock, Signal, AlertCircle, HelpCircle } from 'lucide-react'
 
 // カスタムTooltipコンポーネント
 const CustomTooltip = ({ active, payload, label }) => {
@@ -31,6 +31,100 @@ const CustomTooltip = ({ active, payload, label }) => {
     )
   }
   return null
+}
+
+// 監視項目用ツールチップコンポーネント
+const InfoTooltip = ({ icon: Icon, title, description, calculation, color = '#fff' }) => {
+  const [showTooltip, setShowTooltip] = useState(false)
+
+  return (
+    <h3
+      style={{
+        color,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        margin: '0 0 1rem 0',
+        fontSize: '1rem',
+        fontWeight: '600',
+        position: 'relative'
+      }}
+      onMouseEnter={() => setShowTooltip(true)}
+      onMouseLeave={() => setShowTooltip(false)}
+    >
+      <Icon size={20} />
+      <span>{title}</span>
+      <HelpCircle
+        size={14}
+        style={{
+          color: '#999',
+          cursor: 'help',
+          opacity: showTooltip ? 1 : 0.6,
+          transition: 'opacity 0.2s'
+        }}
+      />
+
+      {showTooltip && (
+        <div style={{
+          position: 'absolute',
+          top: '100%',
+          left: '0',
+          zIndex: 1000,
+          backgroundColor: '#333',
+          color: 'white',
+          padding: '0.75rem',
+          borderRadius: '6px',
+          minWidth: '280px',
+          maxWidth: '380px',
+          fontSize: '0.85rem',
+          lineHeight: '1.4',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+          border: '1px solid #555',
+          animation: 'fadeIn 0.2s ease-out'
+        }}>
+          <div style={{
+            fontWeight: 'bold',
+            marginBottom: '0.5rem',
+            color: '#fff',
+            fontSize: '0.9rem'
+          }}>
+            {title}
+          </div>
+          <div style={{
+            marginBottom: '0.75rem',
+            color: '#e0e0e0',
+            lineHeight: '1.5'
+          }}>
+            {description}
+          </div>
+          {calculation && (
+            <div style={{
+              fontSize: '0.8rem',
+              color: '#bbb',
+              borderTop: '1px solid #555',
+              paddingTop: '0.5rem',
+              marginTop: '0.5rem'
+            }}>
+              <strong style={{ color: '#fff' }}>測定方法：</strong><br />
+              {calculation}
+            </div>
+          )}
+          <div style={{
+            position: 'absolute',
+            top: '-6px',
+            left: '20px',
+            width: '12px',
+            height: '12px',
+            backgroundColor: '#333',
+            border: '1px solid #555',
+            borderRight: 'none',
+            borderBottom: 'none',
+            transform: 'rotate(45deg)'
+          }} />
+        </div>
+      )}
+    </h3>
+  )
 }
 
 export default function Monitoring() {
@@ -163,7 +257,12 @@ export default function Monitoring() {
       </div>      {/* 現在のステータス */}
       <div className="monitoring-grid">
         <div className="monitoring-card">
-          <h3><Globe size={20} style={{ marginRight: '0.5rem' }} />接続状態</h3>
+          <InfoTooltip
+            icon={Globe}
+            title="接続状態"
+            description="ネットワークへの全体的な接続状況。Wi-Fi接続の安定性とルーター・外部サーバーへの到達性を総合的に判定します。"
+            calculation="ConnectionType（接続方式）、パケットロス率、応答時間を基に自動判定。パケットロス5%以上または外部ロス10%以上で「不安定」、切断時は「切断」"
+          />
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span className={`status-indicator ${connectionStatus.status}`}></span>
             <span className="metric-value">{connectionStatus.text}</span>
@@ -174,7 +273,12 @@ export default function Monitoring() {
         </div>
 
         <div className="monitoring-card">
-          <h3><Router size={20} style={{ marginRight: '0.5rem' }} />ルーター応答</h3>
+          <InfoTooltip
+            icon={Router}
+            title="ルーター応答"
+            description="家庭内ルーターへのPing応答時間とパケットロス。Wi-Fi接続品質と家庭内ネットワークの安定性を示します。"
+            calculation="ルーターIPアドレスに対してPingを送信し、応答時間の平均値を測定。5ms以下で良好、20ms以下で注意、それ以上で警告"
+          />
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span className={`status-indicator ${getStatusIndicator(currentStatus.routerPingAvg, { good: 5, warning: 20 })}`}></span>
             <span className="metric-value">
@@ -187,7 +291,12 @@ export default function Monitoring() {
         </div>
 
         <div className="monitoring-card">
-          <h3><Globe size={20} style={{ marginRight: '0.5rem' }} />外部接続</h3>
+          <InfoTooltip
+            icon={Globe}
+            title="外部接続"
+            description="インターネット上の外部サーバー（Google DNS、Cloudflare等）への接続品質。実際のインターネット利用体験を反映します。"
+            calculation="8.8.8.8、1.1.1.1等の外部DNSサーバーにPingを送信。20ms以下で良好、50ms以下で注意、それ以上で警告"
+          />
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span className={`status-indicator ${getStatusIndicator(currentStatus.externalPingAvg, { good: 20, warning: 50 })}`}></span>
             <span className="metric-value">
@@ -200,7 +309,12 @@ export default function Monitoring() {
         </div>
 
         <div className="monitoring-card">
-          <h3><Wifi size={20} style={{ marginRight: '0.5rem' }} />Wi-Fi信号</h3>
+          <InfoTooltip
+            icon={Wifi}
+            title="Wi-Fi信号"
+            description="Wi-Fi信号の強度と品質。接続安定性、通信速度、データ転送の信頼性に直接影響します。"
+            calculation="Signal(dBm): 電波強度を測定。-50dBm以上で良好、-70dBm以上で注意、それ以下で警告。値が0に近いほど強い信号"
+          />
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span className={`status-indicator ${getStatusIndicator(Math.abs(currentStatus.signal), { good: 50, warning: 70 })}`}></span>
             <span className="metric-value">
@@ -215,7 +329,11 @@ export default function Monitoring() {
 
       {/* Ping応答時間のグラフ */}
       <div className="chart-container">
-        <h3>Ping応答時間の推移 <span style={{ fontSize: '0.8rem', color: '#888' }}>（左：過去 → 右：現在）</span></h3>
+        <InfoTooltip
+          icon={Clock}
+          title="Ping応答時間の推移"
+          description="ルーターと外部サーバーへのping応答時間を時系列で表示します。急激な増加は接続の遅延を、無応答（N/A）は接続障害を示します。（左：過去 → 右：現在）"
+        />
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={logData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#444" />
@@ -257,7 +375,11 @@ export default function Monitoring() {
 
       {/* パケットロス率のグラフ */}
       <div className="chart-container">
-        <h3>パケットロス率の推移 <span style={{ fontSize: '0.8rem', color: '#888' }}>（左：過去 → 右：現在）</span></h3>
+        <InfoTooltip
+          icon={AlertCircle}
+          title="パケットロス率の推移"
+          description="送信したパケットに対して応答がないパケットの割合を表示します。高いロス率（5%以上）は回線品質の低下を示します。（左：過去 → 右：現在）"
+        />
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={logData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#444" />
@@ -297,7 +419,11 @@ export default function Monitoring() {
 
       {/* Wi-Fi信号強度のグラフ */}
       <div className="chart-container">
-        <h3>Wi-Fi信号強度と転送レート <span style={{ fontSize: '0.8rem', color: '#888' }}>（左：過去 → 右：現在）</span></h3>
+        <InfoTooltip
+          icon={Signal}
+          title="Wi-Fi信号強度と転送レート"
+          description="Wi-Fi信号強度（dBm）と転送レート（Mbps）を表示します。信号強度が-70dBm以下では接続が不安定になり、転送レートも低下します。（左：過去 → 右：現在）"
+        />
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={logData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#444" />
