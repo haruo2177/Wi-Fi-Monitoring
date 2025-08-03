@@ -35,6 +35,15 @@ export default function Layout() {
               モニタリング
             </Link>
           </li>
+          <li>
+            <Link 
+              to="/anomaly-analysis" 
+              className={location.pathname === '/anomaly-analysis' ? 'active' : ''}
+            >
+              異常値分析
+            </Link>
+          </li>
+
         </ul>
       </nav>
       <main className="main">

@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const fs = require("fs").promises;
 const path = require("path");
@@ -240,6 +240,15 @@ function getTimeLimit(range, now) {
       return new Date(now.getTime() - 24 * 60 * 60 * 1000);
   }
 }
+
+// SPA fallback - serve index.html for all non-API routes
+app.get("*", (req, res) => {
+  if (!req.path.startsWith("/api/")) {
+    res.sendFile(path.join(__dirname, "dist", "index.html"));
+  } else {
+    res.status(404).json({ error: "API endpoint not found" });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

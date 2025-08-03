@@ -8,6 +8,7 @@ import Home from './pages/Home'
 import Settings from './pages/Settings'
 import SettingsPlatform from './pages/SettingsPlatform'
 import Monitoring from './pages/Monitoring'
+import AnomalyAnalysis from './pages/AnomalyAnalysis'
 import ErrorPage from './pages/ErrorPage'
 
 const router = createBrowserRouter([
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: "monitoring",
         element: <Monitoring />
+      },
+      {
+        path: "anomaly-analysis",
+        element: <AnomalyAnalysis />
       }
     ]
   }
