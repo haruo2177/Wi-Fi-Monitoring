@@ -1,7 +1,99 @@
 import React, { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, ScatterChart, Scatter, Cell } from 'recharts'
-import { AlertTriangle, CheckCircle, XCircle, TrendingUp, Activity, Download } from 'lucide-react'
+import { AlertTriangle, CheckCircle, XCircle, TrendingUp, Activity, Download, WifiOff, Clock, Zap, Signal, HelpCircle } from 'lucide-react'
 import { analyzeAnomalies, calculateAnomalyScore, getAnomalyLevel, detectOutliers } from '../utils/anomalyDetection'
+
+// ツールチップコンポーネント
+const InfoTooltip = ({ icon: Icon, title, description, calculation, color }) => {
+  const [showTooltip, setShowTooltip] = useState(false)
+
+  return (
+    <h4
+      style={{
+        color,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        margin: '0 0 1rem 0',
+        fontSize: '1rem',
+        fontWeight: '600',
+        position: 'relative'
+      }}
+      onMouseEnter={() => setShowTooltip(true)}
+      onMouseLeave={() => setShowTooltip(false)}
+    >
+      <Icon size={20} />
+      <span>{title}</span>
+      <HelpCircle
+        size={16}
+        style={{
+          color: '#999',
+          cursor: 'help',
+          opacity: showTooltip ? 1 : 0.7,
+          transition: 'opacity 0.2s'
+        }}
+      />
+
+      {showTooltip && (
+        <div style={{
+          position: 'absolute',
+          top: '100%',
+          left: '0',
+          zIndex: 1000,
+          backgroundColor: '#333',
+          color: 'white',
+          padding: '0.75rem',
+          borderRadius: '6px',
+          minWidth: '320px',
+          maxWidth: '420px',
+          fontSize: '0.85rem',
+          lineHeight: '1.4',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+          border: '1px solid #555',
+          animation: 'fadeIn 0.2s ease-out'
+        }}>
+          <div style={{
+            fontWeight: 'bold',
+            marginBottom: '0.5rem',
+            color: '#fff',
+            fontSize: '0.9rem'
+          }}>
+            {title}
+          </div>
+          <div style={{
+            marginBottom: '0.75rem',
+            color: '#e0e0e0',
+            lineHeight: '1.5'
+          }}>
+            {description}
+          </div>
+          <div style={{
+            fontSize: '0.8rem',
+            color: '#bbb',
+            borderTop: '1px solid #555',
+            paddingTop: '0.5rem',
+            marginTop: '0.5rem'
+          }}>
+            <strong style={{ color: '#fff' }}>計算方法：</strong><br />
+            {calculation}
+          </div>
+          <div style={{
+            position: 'absolute',
+            top: '-6px',
+            left: '20px',
+            width: '12px',
+            height: '12px',
+            backgroundColor: '#333',
+            border: '1px solid #555',
+            borderRight: 'none',
+            borderBottom: 'none',
+            transform: 'rotate(45deg)'
+          }} />
+        </div>
+      )}
+    </h4>
+  )
+}
 
 const AnomalyAnalysisPage = () => {
   const [logData, setLogData] = useState([])
@@ -163,24 +255,48 @@ const AnomalyAnalysisPage = () => {
       {analysisResult && (
         <div className="monitoring-grid" style={{ marginBottom: '2rem' }}>
           <div className="monitoring-card">
-            <h4 style={{ color: '#F44336' }}>接続エラー</h4>
+            <InfoTooltip
+              icon={WifiOff}
+              title="接続エラー"
+              description="ネットワーク接続が完全に失われた状態。Wi-Fi接続の切断や、ルーターとの通信が不可能な状態を示します。"
+              calculation="TransmitRate(Mbps) が 0 または null、かつ External Ping Loss が 100% の場合に検出"
+              color="#F44336"
+            />
             <div className="metric-value">{analysisResult.anomalies.connectionErrors.length}</div>
             <div className="metric-label">件</div>
           </div>
           <div className="monitoring-card">
-            <h4 style={{ color: '#FF9800' }}>高レイテンシ</h4>
+            <InfoTooltip
+              icon={Clock}
+              title="高レイテンシ"
+              description="データ送信の遅延が通常より高い状態。インターネット利用時の応答速度低下の原因となります。"
+              calculation="Router Ping または External Ping の平均値が、全データの第3四分位数 + 1.5×IQR を超える場合に検出"
+              color="#FF9800"
+            />
             <div className="metric-value">
               {analysisResult.anomalies.routerPing.length + analysisResult.anomalies.externalPing.length}
             </div>
             <div className="metric-label">件</div>
           </div>
           <div className="monitoring-card">
-            <h4 style={{ color: '#FFC107' }}>パケットロス</h4>
+            <InfoTooltip
+              icon={Zap}
+              title="パケットロス"
+              description="送信したデータパケットが宛先に届かない現象。通信品質の低下や不安定性を示します。"
+              calculation="Router Loss(%) または External Loss(%) が 0% を超える場合に検出"
+              color="#FFC107"
+            />
             <div className="metric-value">{analysisResult.anomalies.packetLoss.length}</div>
             <div className="metric-label">件</div>
           </div>
           <div className="monitoring-card">
-            <h4 style={{ color: '#9C27B0' }}>信号異常</h4>
+            <InfoTooltip
+              icon={Signal}
+              title="信号異常"
+              description="Wi-Fi信号強度が正常範囲外にある状態。接続安定性と通信速度に影響を与えます。"
+              calculation="Signal(dBm) が -70dBm 以下（弱すぎる）または -30dBm 以上（異常に強い）の場合に検出"
+              color="#9C27B0"
+            />
             <div className="metric-value">{analysisResult.anomalies.signalStrength.length}</div>
             <div className="metric-label">件</div>
           </div>
@@ -332,8 +448,8 @@ const AnomalyAnalysisPage = () => {
                         }
                       </td>
                       <td style={{ padding: '0.5rem' }}>
-                        {anomaly.value ? `${anomaly.value.toFixed(2)}` : 
-                         anomaly.routerLoss ? `R:${anomaly.routerLoss}% E:${anomaly.externalLoss}%` : 
+                        {anomaly.value ? `${anomaly.value.toFixed(2)}` :
+                         anomaly.routerLoss ? `R:${anomaly.routerLoss}% E:${anomaly.externalLoss}%` :
                          anomaly.connectionType || 'N/A'}
                       </td>
                       <td style={{ padding: '0.5rem' }}>

@@ -345,35 +345,35 @@ body {
     color: #213547;
     background-color: #ffffff;
   }
-  
+
   body {
     background-color: #f5f5f5;
   }
-  
+
   .header {
     background: #fff;
     border-bottom-color: #e0e0e0;
   }
-  
+
   .header h1 {
     color: #333;
   }
-  
+
   .nav {
     background: #f8f9fa;
     border-bottom-color: #e0e0e0;
   }
-  
+
   .nav-links a {
     color: #666;
   }
-  
+
   .nav-links a:hover,
   .nav-links a.active {
     background: #e9ecef;
     color: #333;
   }
-  
+
   .main-button,
   .platform-card,
   .config-section,
@@ -382,29 +382,143 @@ body {
     background: #fff;
     border-color: #e0e0e0;
   }
-  
+
   .main-button:hover,
   .platform-card:hover {
     background: #f8f9fa;
   }
-  
+
   .main-button-title,
   .config-section h3,
   .monitoring-card h3,
   .chart-container h3 {
     color: #333;
   }
-  
+
   .main-button-description,
   .config-field label,
   .metric-label {
     color: #666;
   }
-  
+
   .config-field input,
   .config-field textarea {
     background: #fff;
     border-color: #ddd;
     color: #333;
+  }
+}
+
+/* 異常分析ページのカードヘッダースタイル */
+.monitoring-card h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* ツールチップコンテナ */
+.tooltip-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tooltip-trigger {
+  cursor: help;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.tooltip-trigger:hover {
+  opacity: 1;
+}
+
+/* ツールチップコンテンツ */
+.tooltip-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  background: #333;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 4px;
+  min-width: 300px;
+  max-width: 400px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease-in-out;
+}
+
+.tooltip-content.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.tooltip-content::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 20px;
+  width: 10px;
+  height: 10px;
+  background: #333;
+  transform: rotate(45deg);
+}
+
+.tooltip-title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.tooltip-description {
+  margin-bottom: 0.5rem;
+  color: #e0e0e0;
+}
+
+.tooltip-calculation {
+  font-size: 0.8rem;
+  color: #ccc;
+  border-top: 1px solid #555;
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* カラーテーマ */
+.monitoring-card:nth-child(1) h4 {
+  color: #F44336; /* 接続エラー */
+}
+
+.monitoring-card:nth-child(2) h4 {
+  color: #FF9800; /* 高レイテンシ */
+}
+
+.monitoring-card:nth-child(3) h4 {
+  color: #FFC107; /* パケットロス */
+}
+
+.monitoring-card:nth-child(4) h4 {
+  color: #9C27B0; /* 信号異常 */
+}
+
+/* ツールチップアニメーション */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
